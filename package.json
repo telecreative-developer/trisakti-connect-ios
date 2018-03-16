@@ -6,15 +6,46 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
+  "rnpm": {
+    "assets": [ "./app/assets/fonts/" ]
+  },
   "dependencies": {
+    "babel-plugin-transform-remove-console": "^6.9.0",
+    "babel-polyfill": "^6.26.0",
+    "color": "^3.0.0",
+    "emoticons-converter": "^1.0.3",
+    "feathers-client": "^2.4.0",
+    "lodash": "^4.17.5",
+    "moment": "^2.21.0",
+    "native-base": "^2.3.9",
+    "paths-js": "^0.4.6",
     "react": "16.2.0",
-    "react-native": "0.53.3"
+    "react-native": "0.53.3",
+    "react-native-action-button": "^2.8.4",
+    "react-native-image-picker": "^0.26.7",
+    "react-native-linear-gradient": "^2.4.0",
+    "react-native-mail": "^3.0.5",
+    "react-native-modal": "^5.2.0",
+    "react-native-modal-datetime-picker": "^4.13.0",
+    "react-native-pathjs-charts": "0.0.34",
+    "react-native-qrcode": "^0.2.6",
+    "react-native-vector-icons": "^4.5.0",
+    "react-navigation": "^1.4.0",
+    "react-redux": "^5.0.7",
+    "redux": "^3.7.2",
+    "redux-persist": "^5.9.1",
+    "redux-thunk": "^2.2.0",
+    "removeduplicates": "^1.1.0",
+    "socket.io-client": "^2.0.4",
+    "validator": "^9.4.1"
   },
   "devDependencies": {
     "babel-jest": "22.4.1",
     "babel-preset-react-native": "4.0.0",
     "jest": "22.4.2",
-    "react-test-renderer": "16.2.0"
+    "react-test-renderer": "16.2.0",
+    "reactotron-react-native": "^1.14.0",
+    "reactotron-redux": "^1.13.0"
   },
   "jest": {
     "preset": "react-native"
