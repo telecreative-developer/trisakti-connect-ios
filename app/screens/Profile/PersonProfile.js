@@ -29,7 +29,12 @@ class PersonProfile extends Component {
   componentWillUnmount() {
 		this.props.setNavigate("", "");
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
-  }
+	}
+	
+	async handleBack() {
+		await this.props.navigation.goBack()
+		await this.props.setLinkNavigate({navigate: '', data: ''})
+	}
   
 	handleSendFriendRequest() {
 		const { params } = this.props.navigation.state

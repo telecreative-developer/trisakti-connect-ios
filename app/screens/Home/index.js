@@ -217,7 +217,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
+		setNavigate: (link, data) => dispatch(setNavigate(link, data))
 	}
 }
 

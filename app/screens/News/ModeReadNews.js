@@ -37,11 +37,11 @@ class ModeReadNews extends Component<{}, State> {
     const { params } = this.props.navigation.state
     this.setState({clapsCount: params.claps})
     this.props.fetchComments(this.props.session.accessToken)
-	}
-	
+  }
+  
 	componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.backPressed);
-	}
+  }
 
 	componentWillUnmount() {
 		const { clapsCount } = this.state
@@ -175,10 +175,8 @@ class ModeReadNews extends Component<{}, State> {
   						</Right>
   					</CardItem>
   				</Card>
-  				<View style={styles.viewInputComment}>
-  					<Item regular style={styles.itemComment} onPress={() => this.handleOpenComment()}>
-  						<Input disabled placeholder='Write comment...' />
-  					</Item>
+  				<View style={{margin:'auto', padding:20, justifyContent:'center', alignItems:'center'}}>
+  					<Button onPress={() => this.handleOpenComment()} style={{width:370, borderRadius:0, backgroundColor:'transparent', borderWidth:2, borderColor:'#ccc'}}><Text style={{color:'#ccc'}}> Write Comment.. </Text></Button> 
   				</View>
   				<View>
   					<FlatList
@@ -201,8 +199,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
 		setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),
+		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
 		addClaps: (id, claps, accessToken) => dispatch(addClaps(id, claps, accessToken)),
 		sendComment: (comment, accessToken) => dispatch(sendComment(comment, accessToken)),
     fetchComments: (accessToken) => dispatch(fetchComments(accessToken)),
@@ -235,9 +233,6 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		marginBottom: 10,
 		fontWeight: 'bold'
-	},
-	viewInputComment: {
-		margin: 20
 	},
 	viewProfileText: {
 		marginBottom: 10

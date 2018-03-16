@@ -18,6 +18,17 @@ class Headline extends Component<{}, State> {
     loading: false
 	}
 
+  async componentWillMount() {
+    await this.setState({loading: true})
+    await this.props.fetchAllNews(this.props.accessToken)
+    await this.props.fetchAllNewsRealtime(this.props.accessToken)
+    await this.setState({loading: false})
+	}
+
+	async handleFullRead(item) {
+    await this.props.setLinkNavigate({navigate: 'ModeReadNews', data: item})
+	}
+
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.backPressed);
   }
@@ -25,17 +36,6 @@ class Headline extends Component<{}, State> {
   componentWillUnmount() {
 		this.props.setNavigate("", "");
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
-	}
-	
-  async componentWillMount() {
-    await this.setState({loading: true})
-    await this.props.fetchAllNews(this.props.accessToken)
-    await this.props.fetchAllNewsRealtime(this.props.accessToken)
-    await this.setState({loading: false})
-  }
-
-	async handleFullRead(item) {
-    await this.props.setLinkNavigate({navigate: 'ModeReadNews', data: item})
 	}
 
 	async handleRefresh() {

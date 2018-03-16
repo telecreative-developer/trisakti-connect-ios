@@ -2,8 +2,8 @@
 import React, { Component } from 'react'
 import { Container, Header, Left, Button, Icon, Right, Content, List, ListItem, Body, Text } from 'native-base'
 import { StyleSheet, BackHandler } from 'react-native'
-import ThemeContainer from './ThemeContainer'
 import { setNavigate } from "../actions/processor"
+import ThemeContainer from './ThemeContainer'
 
 type State = {
   back: boolean
@@ -19,7 +19,6 @@ class Options extends Component<{}, State> {
   }
 
 	componentWillUnmount() {
-    this.props.setNavigate("", "");
 		BackHandler.removeEventListener('hardwareBackPress', this.backPressed)
   }
 

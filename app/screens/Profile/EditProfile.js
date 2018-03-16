@@ -9,8 +9,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { fetchFaculties, fetchMajors } from '../../actions/users'
-import { setLinkNavigate } from '../../actions/processor'
-import { setNavigate } from "../../actions/processor"
+import { setLinkNavigate, setNavigate } from '../../actions/processor'
 
 class EditProfile extends Component {
   constructor() {
@@ -249,10 +248,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		fetchDataFaculties: () => dispatch(fetchFaculties()),
-		fetchDataMajors: () => dispatch(fetchMajors()),
 		setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),
 		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
+		fetchDataFaculties: () => dispatch(fetchFaculties()),
+		fetchDataMajors: () => dispatch(fetchMajors()),
 		editProfileWithAvatar: (id, avatar, data, accessToken) => dispatch(editProfileWithAvatar(id, avatar, data, accessToken)),
 		editProfileWithoutAvatar: (id, data, accessToken) => dispatch(editProfileWithoutAvatar(id, data, accessToken)),
 		saveSession: (id, name, avatar, email, facebook, twitter, linkedin, accessToken) => dispatch(saveSession(id, name, avatar, email, facebook, twitter, linkedin, accessToken)),

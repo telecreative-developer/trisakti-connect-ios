@@ -8,8 +8,8 @@ import ImagePicker from 'react-native-image-picker'
 import { stringToEmoticon, emoticonToString } from 'emoticons-converter'
 import ThemeContainer from '../ThemeContainer'
 import { sendChatPersonal, sendImageChatPersonal, fetchChatsByID, fetchChatsByIDRealtime } from '../../actions/chats'
-import { setLinkNavigate } from '../../actions/processor'
 import { setNavigate } from "../../actions/processor"
+import { setLinkNavigate } from '../../actions/processor'
 import defaultPhotoProfile from '../../assets/images/default-user.png'
 
 const { width } = Dimensions.get('window')
@@ -24,22 +24,12 @@ class ModeChatting extends Component<{}> {
 			previewImage:	false,
 			previewImageContent: ''
 		}
-
 		this.handleSelectThumbnail = this.handleSelectThumbnail.bind(this)
   }
 
-	componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
-  }
-
-  componentWillUnmount() {
-		this.props.setNavigate("", "");
-    BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
-	}
-	
 	async handleBack() {
 		await this.props.navigation.goBack()
-    await this.props.setLinkNavigate({navigate: '', data: ''})
+		await this.props.setLinkNavigate({ navigate: '', data: '' })
 	}
 
   async componentDidMount() {
@@ -48,7 +38,16 @@ class ModeChatting extends Component<{}> {
     await this.props.fetchChatsByID(params.id, params.myid, this.props.session.accessToken)
     await this.props.fetchChatsByIDRealtime(params.id, params.myid,  this.props.session.accessToken)
     await this.setState({loading: false})
+	}
+
+	componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
   }
+	
+  componentWillUnmount() {
+		this.props.setNavigate("", "");
+    BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
+	}
 
 	async handleSendMessage(id, myid) {
 		const data = await {
@@ -177,8 +176,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setLinkNavigate: (item) => dispatch(setLinkNavigate(item)),
 		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
+		setLinkNavigate: (item) => dispatch(setLinkNavigate(item)),
     fetchChatsByID: (id, myid, accessToken) => dispatch(fetchChatsByID(id, myid, accessToken)),
     fetchChatsByIDRealtime: (id, myid, accessToken) => dispatch(fetchChatsByIDRealtime(id, myid, accessToken)),
 		sendChatPersonal: (item, accessToken) => dispatch(sendChatPersonal(item, accessToken)),
