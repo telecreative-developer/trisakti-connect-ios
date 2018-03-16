@@ -4,10 +4,9 @@ import ImagePicker from 'react-native-image-picker'
 import { connect } from 'react-redux'
 import { publishNews } from '../../actions/news'
 import { isEmpty } from 'validator'
-import { setNavigate } from "../../actions/processor"
+import { setLinkNavigate } from "../../actions/processor"
 import { Container, Header, Content, FooterTab, Left, Footer, ListItem, H1, Input, Body, Right, Text, Button, Icon, Title } from 'native-base'
 import ThemeContainer from '../ThemeContainer'
-import { setLinkNavigate } from '../../actions/processor'
 
 const { height, width } = Dimensions.get('window')
 
@@ -50,7 +49,7 @@ class CreateNews extends Component {
   }
 
   componentWillUnmount() {
-		this.props.setNavigate("", "");
+		this.props.setLinkNavigate({navigate: '', data: ''})
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
 	}
 
@@ -235,7 +234,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
 		setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),
 		publishNews: (thumbnailBase64, data, accessToken) => dispatch(publishNews(thumbnailBase64, data, accessToken))
 	}

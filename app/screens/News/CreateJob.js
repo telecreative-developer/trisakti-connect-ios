@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { StyleSheet, View, Dimensions, Alert, BackHandler } from 'react-native'
 import { connect } from 'react-redux'
 import { isEmpty } from 'validator'
-import { setNavigate } from "../../actions/processor"
+import { setLinkNavigate } from "../../actions/processor"
 import { Container, Header, Content, FooterTab, Picker, Card, CardItem, Right, Left, Footer, Form, Item, Label, H1, Input, Body, Text, Button, Icon, Title } from 'native-base'
 import ThemeContainer from '../ThemeContainer'
 import { postJob } from '../../actions/news'
@@ -34,7 +34,7 @@ class CreateJob extends Component {
   }
 
   componentWillUnmount() {
-		this.props.setNavigate("", "");
+		this.props.setLinkNavigate({navigate: '', data: ''})
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
 	}
   
@@ -249,7 +249,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
+		setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),
 		postJob: (data, accessToken) => dispatch(postJob(data, accessToken))
 	}
 }

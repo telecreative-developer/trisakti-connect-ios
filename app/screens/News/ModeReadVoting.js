@@ -44,7 +44,7 @@ class ModeReadVoting extends Component {
   }
 
   componentWillUnmount() {
-		this.props.setNavigate("", "");
+		this.props.setLinkNavigate({navigate: '', data: ''})
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
   }
 

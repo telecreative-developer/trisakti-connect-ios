@@ -5,7 +5,7 @@ import { Container, Header, H1, H2, Card, CardItem, Input, FooterTab, List, Item
 import Modal from 'react-native-modal'
 import { connect } from 'react-redux'
 import { isEmpty } from 'validator'
-import { setNavigate } from "../../actions/processor"
+import { setLinkNavigate } from "../../actions/processor"
 import { addVoteList, publishVoteThumbnail, removeVoteList } from '../../actions/polls'
 import ThemeContainer from '../ThemeContainer'
 
@@ -35,7 +35,7 @@ class CreateVote extends Component {
   }
 
   componentWillUnmount() {
-		this.props.setNavigate("", "");
+		this.props.setLinkNavigate({navigate: '', data: ''})
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
 	}
 
@@ -270,7 +270,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setNavigate: (link, data) => dispatch(setNavigate(link, data)),
+    setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),
     publishVoteThumbnail: (thumbnail, dataVote, dataChoice, accessToken) => dispatch(publishVoteThumbnail(thumbnail, dataVote, dataChoice, accessToken)),
     removeVoteList: (id) => dispatch(removeVoteList(id)),
     addVoteList: (data) => dispatch(addVoteList(data))

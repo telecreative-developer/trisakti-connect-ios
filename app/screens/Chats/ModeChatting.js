@@ -39,13 +39,10 @@ class ModeChatting extends Component<{}> {
     await this.props.fetchChatsByIDRealtime(params.id, params.myid,  this.props.session.accessToken)
     await this.setState({loading: false})
 	}
-
-	componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
-  }
 	
+
   componentWillUnmount() {
-		this.props.setNavigate("", "");
+		this.props.setLinkNavigate({ navigate: ''})
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
 	}
 

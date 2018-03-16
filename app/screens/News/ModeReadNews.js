@@ -47,7 +47,7 @@ class ModeReadNews extends Component<{}, State> {
 		const { clapsCount } = this.state
 		const { params } = this.props.navigation.state
 		this.props.addClaps(params.id_news, clapsCount, this.props.session.accessToken)
-		this.props.setNavigate("", "");
+		this.props.setLinkNavigate({navigate: '', data: ''})
     BackHandler.removeEventListener('hardwareBackPress', this.backPressed);
 	}
 	
