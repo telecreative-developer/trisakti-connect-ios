@@ -53,7 +53,10 @@ const App = StackNavigator({
 	CreateJob: {screen: CreateJob},
 	CreateVote: {screen: CreateVote}
 }, {
-	headerMode: 'none'
+	headerMode: 'none',
+	navigationOptions: {
+		gesturesEnabled: false,
+	},
 })
 
 const store = Reactotron.createStore(reducers, applyMiddleware(thunk))

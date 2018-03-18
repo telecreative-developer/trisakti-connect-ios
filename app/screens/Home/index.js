@@ -7,7 +7,7 @@ import News from '../News'
 import Chats from '../Chats'
 import Contacts from '../Contacts'
 import Profile from '../Profile'
-import { setNavigate } from "../../actions/processor"
+import { setLinkNavigate } from '../../actions/processor'
 import ThemeContainer from '../ThemeContainer'
 import headerlogo from '../../assets/images/logoheader.png'
 
@@ -38,7 +38,6 @@ class Home extends Component<{}, State> {
   }
 
   componentWillUnmount() {
-		this.props.setNavigate("", "");
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
 	}
 
@@ -217,7 +216,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setNavigate: (link, data) => dispatch(setNavigate(link, data))
+		setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate))
 	}
 }
 
