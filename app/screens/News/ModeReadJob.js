@@ -50,8 +50,9 @@ class ModeReadJob extends Component {
 								<Input style={styles.input} disabled value={params.job_function} />
 							</Item>
 						</Form>
-						<Card style={{marginBottom: 0, borderRadius: 0}}>
-							<CardItem style={{backgroundColor: '#d35c72', borderRadius: 0}}>
+						
+						<List>
+							<ListItem>
 								<Left>
 									<Text style={styles.table_header}>Experience</Text>
 								</Left>
@@ -61,10 +62,11 @@ class ModeReadJob extends Component {
 								<Right>
 									<Text style={styles.table_header}>Location</Text>
 								</Right>
-							</CardItem>
-						</Card>
-						<Card style={{marginTop: 0, borderRadius: 0}}>
-							<CardItem>
+							</ListItem>
+						</List>
+
+						<List>
+							<ListItem>
 								<Left>
 									<Text style={styles.table_input}>{params.experience}</Text>
 								</Left>
@@ -74,8 +76,9 @@ class ModeReadJob extends Component {
 								<Right>
 									<Text style={styles.table_input}>{params.work_location}</Text>
 								</Right>
-							</CardItem>
-						</Card>
+							</ListItem>
+						</List>				
+
 						<View style={styles.content}>
 							<Text style={styles.textOverview}>{params.overview}</Text>
 						</View>
@@ -122,7 +125,7 @@ const styles = StyleSheet.create({
 		fontSize: 14
 	},
 	table_header: {
-		color: '#fff',
+		color: '#D35C72',
 		fontSize: 14,
 		fontWeight: 'bold'
 	}
