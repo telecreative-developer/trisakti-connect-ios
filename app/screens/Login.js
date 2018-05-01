@@ -25,7 +25,6 @@ import ThemeContainer from './ThemeContainer'
 import logo from '../assets/images/logo.png'
 import { url } from '../server'
 import { setSession, setLinkNavigate, setDataUser } from '../actions/processor'
-import { setNavigate } from "../actions/processor"
 
 const { height } = Dimensions.get('window')
 
@@ -46,19 +45,16 @@ class Login extends Component<{}> {
 		this.handleRegister = this.handleRegister.bind(this)
 	}
 
-	componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
-  }
+	componentWillMount() {
+		BackHandler.addEventListener('hardwareBackPress', () => {
+			return true
+		})
+	}
 
-  componentWillUnmount() {
+	componentWillUnmount() {
 		this.props.setLinkNavigate({navigate: '', data: ''})
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
-  }
-
-  backPressed = () => {
-    this.props.navigation.goBack(null);
-    return true;
-  };
+	}
 
 	handleSetEmail(email: string) {
 		this.setState({ email })
@@ -190,7 +186,6 @@ const mapDispatchToProps = dispatch => {
 	return {
 		setDataUser: data => dispatch(setDataUser(data)),
 		setLinkNavigate: navigate => dispatch(setLinkNavigate(navigate)),
-		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
 		setSession: data => dispatch(setSession(data)),
 		saveSession: (email, accessToken) =>
 			dispatch(saveSession(email, accessToken)),
@@ -232,7 +227,7 @@ const styles = StyleSheet.create({
 	},
 	textForgotPassowrd: {
 		color: '#FFFFFF',
-		marginBottom: 20,
+		marginBottom: 20
 	},
 	viewIcon: {
 		display: 'flex',

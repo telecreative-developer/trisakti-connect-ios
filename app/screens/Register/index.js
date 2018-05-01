@@ -376,7 +376,7 @@ class Register extends Component {
 					<Content>
 						<Form>
 							<Item stackedLabel>
-								<Label style={styles.label}>Nim</Label>
+								<Label>Nim</Label>
 								<Input
 									disabled={this.state.disabledNim}
 									value={this.state.nim}
@@ -388,7 +388,7 @@ class Register extends Component {
 								/>
 							</Item>
 							<Item stackedLabel>
-								<Label style={styles.label}>Fullname</Label>
+								<Label>Fullname</Label>
 								<Input
 									disabled={this.state.disabledName}
 									value={this.state.name}
@@ -400,7 +400,7 @@ class Register extends Component {
 								/>
 							</Item>
 							<Item stackedLabel>
-								<Label style={styles.label}>Email</Label>
+								<Label>Email</Label>
 								<Input
 									style={styles.input}
 									keyboardType="email-address"
@@ -409,7 +409,7 @@ class Register extends Component {
 								/>
 							</Item>
 							<Item stackedLabel>
-								<Label style={styles.label}>Phone</Label>
+								<Label>Phone</Label>
 								<Input
 									style={styles.input}
 									keyboardType="numeric"
@@ -431,7 +431,6 @@ class Register extends Component {
 										<Picker
 											mode="dropdown"
 											selectedValue={this.state.gender}
-											placeholder="Select Your Gender"
 											onValueChange={gender => this.setState({ gender })}>
 											<Item label="Male" value={1} />
 											<Item label="Female" value={2} />
@@ -439,7 +438,7 @@ class Register extends Component {
 									</View>
 								)}
 							<Item stackedLabel>
-								<Label style={styles.label}>Address</Label>
+								<Label>Address</Label>
 								<Input
 									style={styles.input}
 									value={this.state.address}
@@ -447,7 +446,7 @@ class Register extends Component {
 								/>
 							</Item>
 							<Item stackedLabel>
-								<Label style={styles.label}>Sub-district</Label>
+								<Label>Sub-district</Label>
 								<Input
 									style={styles.input}
 									value={this.state.kecamatan}
@@ -455,7 +454,7 @@ class Register extends Component {
 								/>
 							</Item>
 							<Item stackedLabel>
-								<Label style={styles.label}>Urban Village</Label>
+								<Label>Urban Village</Label>
 								<Input
 									style={styles.input}
 									value={this.state.kelurahan}
@@ -463,7 +462,7 @@ class Register extends Component {
 								/>
 							</Item>
 							<Item stackedLabel>
-								<Label style={styles.label}>Province</Label>
+								<Label>Province</Label>
 								<Input
 									style={styles.input}
 									value={this.state.provinsi}
@@ -471,7 +470,7 @@ class Register extends Component {
 								/>
 							</Item>
 							<Item stackedLabel>
-								<Label style={styles.label}>Postcode</Label>
+								<Label>Postcode</Label>
 								<Input
 									style={styles.input}
 									keyboardType="numeric"
@@ -484,7 +483,7 @@ class Register extends Component {
 								onPress={() =>
 									this.setState({ isDateTimePickerVisible: true })
 								}>
-								<Label style={styles.label}>Date of Birth</Label>
+								<Label>Date of Birth</Label>
 								<Input
 									style={styles.input}
 									disabled
@@ -493,7 +492,7 @@ class Register extends Component {
 								/>
 							</Item>
 							<Item stackedLabel>
-								<Label style={styles.label}>Place of Birth</Label>
+								<Label>Place of Birth</Label>
 								<Input
 									style={styles.input}
 									value={this.state.birth_place}
@@ -530,7 +529,7 @@ class Register extends Component {
 					<Content>
 						<Form>
 							<Item stackedLabel>
-								<Label style={styles.label}>Angkatan</Label>
+								<Label>Angkatan</Label>
 								<Input
 									style={styles.input}
 									keyboardType="numeric"
@@ -583,7 +582,7 @@ class Register extends Component {
 								</Picker>
 							</View>
 							<Item stackedLabel>
-								<Label style={styles.label}>Kata Sandi</Label>
+								<Label>Kata Sandi</Label>
 								<Input
 									secureTextEntry
 									value={this.state.password}
@@ -597,7 +596,7 @@ class Register extends Component {
 									{this.props.loading.condition ? (
 										<Spinner color="white" />
 									) : (
-										<Text style={styles.label}>Register</Text>
+										<Text>Register</Text>
 									)}
 								</Button>
 							</View>
@@ -795,7 +794,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row'
 	},
 	inputDisabled: {
-		fontSize: 14
+		fontSize: 14,
 	},
 	input: {
 		fontSize: 14

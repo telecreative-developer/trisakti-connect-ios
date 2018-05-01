@@ -1,4 +1,4 @@
-import { SESSION, PROCESS_LOADING, PROCESS_FAILED, SET_NOTIFICATION, SET_LINK_NAVIGATE, SET_DATA_USER, ON_SET_NAVIGATE } from '../constants'
+import { SESSION, PROCESS_LOADING, PROCESS_FAILED, SET_NOTIFICATION, SET_LINK_NAVIGATE, SET_DATA_USER } from '../constants'
 import { url } from '../server'
 
 export const setSession = (dataSession) => {
@@ -30,14 +30,6 @@ const loading = (loading) => {
 export const setFailed = (dataFailed) => {
 	return (dispatch) => {
 		dispatch(failed(dataFailed))
-	}
-}
-
-export const setNavigate = (link, data) => {
-	return {
-		type: ON_SET_NAVIGATE,
-		link,
-		data
 	}
 }
 

@@ -2,7 +2,6 @@
 import React, { Component } from 'react'
 import { Container, Header, Left, Button, Icon, Right, Content, List, ListItem, Body, Text } from 'native-base'
 import { StyleSheet, BackHandler } from 'react-native'
-import { setNavigate } from "../actions/processor"
 import ThemeContainer from './ThemeContainer'
 
 type State = {
@@ -14,18 +13,19 @@ class Options extends Component<{}, State> {
     back: false
   }
   
-  componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
-  }
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBacPress', async () => {
+      if(!this.state.back) {
+        await this.setState({back: true})
+      }else{
+        await this.props.navigation.goBack()
+      }
+		})
+	}
 
 	componentWillUnmount() {
-		BackHandler.removeEventListener('hardwareBackPress', this.backPressed)
+		BackHandler.removeEventListener('hardwareBackPress')
   }
-
-  backPressed = () => {
-    this.props.navigation.goBack(null);
-    return true;
-  };
   
   render() {
     return (
@@ -45,7 +45,7 @@ class Options extends Component<{}, State> {
                 <Icon name='paper' />
               </Left>
               <Body>
-                <Text style={{fontSize: 14, fontWeight: 'bold'}}>News</Text>
+                <Text style={{ fontSize: 14, fontWeight: 'bold'}}>News</Text>
               </Body>
               <Right>
                 <Icon name='arrow-forward' />
@@ -56,7 +56,7 @@ class Options extends Component<{}, State> {
                 <Icon name='person' />
               </Left>
               <Body>
-                <Text style={{fontSize: 14, fontWeight: 'bold'}}>Vacancy</Text>
+                <Text style={{ fontSize: 14, fontWeight: 'bold'}}>Vacancy</Text>
               </Body>
               <Right>
                 <Icon name='arrow-forward' />
@@ -67,7 +67,7 @@ class Options extends Component<{}, State> {
                 <Icon name='stats' />
               </Left>
               <Body>
-                <Text style={{fontSize: 14, fontWeight: 'bold'}}>Voting</Text>
+                <Text style={{ fontSize: 14, fontWeight: 'bold'}}>Voting</Text>
               </Body>
               <Right>
                 <Icon name='arrow-forward' />
@@ -78,12 +78,6 @@ class Options extends Component<{}, State> {
       </Container>
     )
   }
-}
-
-const mapDispatchToProps = dispatch => {
-	return {
-		setNavigate: (link, data) => dispatch(setNavigate(link, data))
-	}
 }
 
 const styles = StyleSheet.create({

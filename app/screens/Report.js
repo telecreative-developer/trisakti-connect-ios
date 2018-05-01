@@ -29,7 +29,6 @@ import {
 	fetchMajors,
 	registerManual
 } from '../actions/users'
-import { setNavigate } from "../actions/processor"
 
 const { width, height } = Dimensions.get('window')
 
@@ -42,7 +41,7 @@ class Report extends Component {
 			fullname: '',
 			id_faculty: 1,
 			id_major: 1,
-			nim: 0,
+			nim: '',
 			name: '',
 			email: '',
 			phone: '',
@@ -62,16 +61,20 @@ class Report extends Component {
 		}
 	}
 
-	componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
-  }
+	componentWillMount() {
+		BackHandler.addEventListener('hardwareBackPress', () => {
+			this.handleBackButton()
+			return true
+		})
 
-  componentWillUnmount() {
-    this.props.setNavigate("", "");
-    BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
 		this.props.fetchDataMajors()
 		this.props.fetchDataFaculties()
-  }
+	}
+
+	componentWillUnmount() {
+		this.props.setNavigate("", "");
+    BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
+	}
 
 	handleBackButton() {
 		this.props.navigation.goBack()
@@ -90,7 +93,7 @@ class Report extends Component {
 	}
 
 	async handleSendReportOk() {
-		const { fullname, subject, contentreport } = await this.state
+		const { fullname, subject } = await this.state
 		await Mailer.mail(
 			{
 				subject: this.state.subject,
@@ -108,10 +111,25 @@ class Report extends Component {
 			(error, event) => {}
 		)
 		await this.setState({
-			graduated: '',
-			fullname: '',
 			subject: '',
-			contentreport: ''
+			fullname: '',
+			id_faculty: 1,
+			id_major: 1,
+			nim: '',
+			name: '',
+			email: '',
+			phone: '',
+			address: '',
+			kecamatan: '',
+			kelurahan: '',
+			provinsi: '',
+			postcode: '',
+			gender: 1,
+			birth: moment(),
+			birth_place: '',
+			avatar: '',
+			password: '',
+			graduated: ''
 		})
 	}
 
@@ -348,7 +366,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setNavigate: (link, data) => dispatch(setNavigate(link, data)),
 	sendReport: data => dispatch(sendReport(data)),
 	fetchDataFaculties: () => dispatch(fetchFaculties()),
 	fetchDataMajors: () => dispatch(fetchMajors()),

@@ -82,7 +82,9 @@ const mapDispatchToProps = (dispatch) => {
 		setSession: (data) => dispatch(setSession(data)),
 		saveSession: (email, accessToken) => dispatch(saveSession(email, accessToken)),
 		savePassword: (password) => dispatch(savePassword(password)),
-		setDataUser: (dataUser) => dispatch(setDataUser(dataUser))
+		setDataUser: (dataUser) => dispatch(setDataUser(dataUser)),
+		fetchDataFaculties: () => dispatch(fetchFaculties()),
+		fetchDataMajors: () => dispatch(fetchMajors())
 	}
 }
 

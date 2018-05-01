@@ -1,7 +1,7 @@
 /* @flow */
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { FlatList, View, StyleSheet, TouchableHighlight } from 'react-native'
+import { FlatList, View, StyleSheet, TouchableHighlight, Dimensions } from 'react-native'
 import { Card, CardItem, Body, Text, Thumbnail } from 'native-base'
 import moment from 'moment'
 import defaultAvatar from '../../assets/images/default-user.png'
@@ -11,6 +11,8 @@ import { setLinkNavigate } from '../../actions/processor'
 type State = {
   loading: boolean
 }
+
+const { height, width } = Dimensions.get('window');
 
 class Jobs extends Component<{}, State> {
   state = {
@@ -33,26 +35,22 @@ class Jobs extends Component<{}, State> {
   renderItems = ({item}) => {
   	return (
   		<TouchableHighlight onPress={() => this.props.setLinkNavigate({navigate: 'ModeReadJob', data: item})}>
-  			<Card>
-  				<CardItem>
-  					<Body>
-  						<Text style={styles.title}>{item.job_title}</Text>
-  						<Text style={styles.company}>{item.company}</Text>
-  						<Text style={styles.content} ellipsizeMode='tail' numberOfLines={3}>{item.overview}</Text>
-  						<View style={styles.viewFoot}>
-  							{(item.users[0].avatar.length !== '') ? (
-  								<Thumbnail source={{uri: item.users[0].avatar}} style={styles.avatar} />
-  							) : (
-  								<Thumbnail source={defaultAvatar} style={styles.avatar} />
-  							)}
-  							<View>
-  								<Text note style={styles.defaultTextNote}>{item.users[0].name}</Text>
-  								<Text note style={styles.defaultDate}>{moment(item.createdAt).format('lll')}</Text>
-  							</View>
-  						</View>
-  					</Body>
-  				</CardItem>
-  			</Card>
+  			<View style={{margin: 10, borderWidth: 1, borderColor: '#ccc', padding: 15}}>
+					<Text style={styles.title}>{item.job_title}</Text>
+					<Text style={styles.company}>{item.company}</Text>
+					<Text style={styles.content} ellipsizeMode='tail' numberOfLines={2}>{item.overview}</Text>
+					<View style={styles.viewFoot}>
+						{(item.users[0].avatar) ? (
+							<Thumbnail source={{uri: item.users[0].avatar}} style={styles.avatar} />
+						) : (
+							<Thumbnail source={defaultAvatar} style={styles.avatar} />
+						)}
+						<View>
+							<Text note style={styles.defaultTextNote}>{item.users[0].name}</Text>
+							<Text note style={styles.defaultDate}>{moment(item.createdAt).format('lll')}</Text>
+						</View>
+					</View>
+				</View>
   		</TouchableHighlight>
   	)
   }
@@ -89,14 +87,14 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const styles = StyleSheet.create({
-	title: {
+	title:{
 		fontSize: 18,
 		fontWeight: 'bold'
 	},
-	content: {
+	content:{
+		fontSize: 12,
 		marginTop: 10,
-		marginBottom: 10,
-		fontSize: 12
+		marginBottom: 10
 	},
 	viewFoot: {
 		display: 'flex',
@@ -107,8 +105,8 @@ const styles = StyleSheet.create({
 		color: '#000000'
 	},
 	avatar: {
-		width: 30,
-		height: 30,
+		width: 40,
+		height: 40,
 		marginRight: 10
 	},
 	defaultTextNote: {

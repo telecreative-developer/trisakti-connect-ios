@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Dimensions, View, StyleSheet, Text, FlatList, TouchableHighlight, Alert, BackHandler } from 'react-native'
+import { Image, Dimensions, View, StyleSheet, Text, FlatList, TouchableHighlight, Alert, BackHandler, StatusBar } from 'react-native'
 import { Container, Header, Icon, H2, Content, Button, Body, Left, Card, CardItem, Right } from 'native-base'
 import { connect } from 'react-redux'
 import LinearGradient from 'react-native-linear-gradient'
@@ -8,7 +8,6 @@ import ThemeContainer from '../ThemeContainer'
 import { postVote, setModeReadPolls } from '../../actions/polls'
 import emptyelection from '../../assets/images/emptyelection.png'
 import { setLinkNavigate } from '../../actions/processor'
-import { setNavigate } from "../../actions/processor"
 
 const { width, height } = Dimensions.get('window')
 
@@ -40,13 +39,20 @@ class ModeReadVoting extends Component {
 	}
 
 	componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
-  }
+		BackHandler.addEventListener('hardwareBackPress', () => {
+			this.handleBack()
+		})
+	}
 
-  componentWillUnmount() {
+	componentWillUnmount() {
 		this.props.setLinkNavigate({navigate: '', data: ''})
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
-  }
+	}
+
+	async handleBack() {
+		await this.props.setLinkNavigate({navigate: '', data: ''})
+		await this.props.navigation.goBack()
+	}
 
   renderItems = ({item}) => {
 		return (
@@ -106,6 +112,10 @@ class ModeReadVoting extends Component {
   	const { params } = this.props.navigation.state
   	return (
   		<Container style={styles.container}>
+				<StatusBar
+					backgroundColor="#fff"
+					barStyle="light-content"
+				/>
   			<Content>
   				<Image source={{uri: params.thumbnail_poll}} style={styles.cover} />
   				<View style={styles.viewPolls}>
@@ -180,7 +190,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
 		setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),
 		postVote: (data, accessToken) => dispatch(postVote(data, accessToken)),
 		setModeReadPolls: (read) => dispatch(setModeReadPolls(read))

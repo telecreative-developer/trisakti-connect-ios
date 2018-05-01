@@ -19,7 +19,6 @@ import {
 	Badge
 } from 'native-base'
 import { connect } from 'react-redux'
-import Icon from 'react-native-vector-icons/Entypo'
 import {
 	fetchFriendRequest,
 	fetchFriendRequestRealtime,

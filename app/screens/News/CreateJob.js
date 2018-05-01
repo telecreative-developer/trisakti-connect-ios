@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { StyleSheet, View, Dimensions, Alert, BackHandler } from 'react-native'
 import { connect } from 'react-redux'
 import { isEmpty } from 'validator'
-import { setLinkNavigate } from "../../actions/processor"
 import { Container, Header, Content, FooterTab, Picker, Card, CardItem, Right, Left, Footer, Form, Item, Label, H1, Input, Body, Text, Button, Icon, Title } from 'native-base'
 import ThemeContainer from '../ThemeContainer'
 import { postJob } from '../../actions/news'
@@ -29,11 +28,13 @@ class CreateJob extends Component {
 		this.handlePostJob = this.handlePostJob.bind(this)
 	}
 
-	componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
-  }
+	componentWillMount() {
+		BackHandler.addEventListener('hardwareBacPress', () => {
+			this.props.navigation.goBack()
+		})
+	}
 
-  componentWillUnmount() {
+	componentWillUnmount() {
 		this.props.setLinkNavigate({navigate: '', data: ''})
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
 	}
@@ -74,14 +75,14 @@ class CreateJob extends Component {
 		if(this.state.preview) {
 			return (
 				<Container style={styles.container}>
-					<Header>
+					<Header style={styles.header}>
 						<Left>
 							<Button transparent onPress={() => this.setState({preview: false})}>
-								<Icon name='arrow-back' />
+								<Icon name='arrow-back' style={{color: '#fff'}}/>
 							</Button>
 						</Left>
 						<Body>
-							<Title>Preview</Title>
+							<Title style={{color: '#fff'}}>Preview</Title>
 						</Body>
 						<Right />
 					</Header>
@@ -98,32 +99,29 @@ class CreateJob extends Component {
 									<Input disabled value={this.state.job_function} />
 								</Item>
 							</Form>
-							<Card>
-								<CardItem style={{backgroundColor: '#d35c72'}}>
-									<Left>
-										<Text style={{fontWeight: 'bold', color: '#FFF'}}>Experience</Text>
-									</Left>
-									<Body>
-										<Text style={{fontWeight: 'bold', color: '#FFF'}}>Salary</Text>
-									</Body>
-									<Right>
-										<Text style={{fontWeight: 'bold', color: '#FFF'}}>Location</Text>
-									</Right>
-								</CardItem>
-							</Card>
-							<Card>
-								<CardItem>
-									<Left>
-										<Text style={{color: '#111'}}>{this.state.experience}</Text>
-									</Left>
-									<Body>
-										<Text style={{color: '#111'}}>IDR {this.state.salary}</Text>
-									</Body>
-									<Right>
-										<Text style={{color: '#111'}}>{this.state.work_location}</Text>
-									</Right>
-								</CardItem>
-							</Card>
+							<View style={{flex: 1, flexDirection: 'row', backgroundColor: '#d35c72', padding: 10}}>
+								<View style={{flex: 0.33}}>
+									<Text style={styles.table_header}>Experience</Text>
+								</View>
+								<View style={{flex: 0.33}}>
+									<Text style={styles.table_header}>Salary</Text>
+								</View>
+								<View style={{flex: 0.33}}>
+									<Text style={styles.table_header}>Location</Text>
+								</View>
+							</View>	
+
+							<View style={{flex: 1, flexDirection: 'row', marginTop: 15}}>
+								<View style={{flex: 0.33}}>
+									<Text style={styles.table_input}>{this.state.experience}</Text>
+								</View>
+								<View style={{flex: 0.33}}>
+									<Text style={styles.table_input}>IDR {this.state.salary}</Text>
+								</View>
+								<View style={{flex: 0.33}}>
+									<Text style={styles.table_input}>{this.state.work_location}</Text>
+								</View>
+							</View>	
 							<View style={{margin: 15}}>
 								<Text>{this.state.overview}</Text>
 							</View>
@@ -141,14 +139,14 @@ class CreateJob extends Component {
 		}
   	return (
   		<Container style={styles.container}>
-  			<Header>
+  			<Header style={styles.header}>
   				<Left>
   					<Button transparent onPress={() => this.props.navigation.goBack()}>
-  						<Icon name='close' />
+  						<Icon name='close' style={{color: '#fff'}}/>
   					</Button>
   				</Left>
   				<Body>
-  					<Title>Post a Job</Title>
+  					<Title style={{color: '#fff'}}>Post a Job</Title>
   				</Body>
   				<Right/>
   			</Header>
@@ -249,7 +247,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),
 		postJob: (data, accessToken) => dispatch(postJob(data, accessToken))
 	}
 }
@@ -257,6 +254,16 @@ const mapDispatchToProps = (dispatch) => {
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#FFFFFF'
+	},
+	header:{
+		backgroundColor: '#2989d8',
+	},
+	table_header:{
+		color:'#fff',
+		alignSelf: 'center'
+	},
+	table_input:{
+		alignSelf: 'center'
 	},
 	viewImage: {
 		display: 'flex',

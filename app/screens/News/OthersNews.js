@@ -30,28 +30,28 @@ class OthersNews extends Component<{}, State> {
   renderItems = ({item}) => {
   	return (
   		<TouchableHighlight onPress={() => this.handleFullRead(item)}>
-  			<Card avatar>
-  				<CardItem>
-  					<Body>
-  						<Text numberOfLines={1} style={styles.title}>{item.title}</Text>
-  						<Text style={styles.content} ellipsizeMode='tail' numberOfLines={2}>{item.content}</Text>
-  						<View style={styles.viewFoot}>
-  							{(item.users[0].avatar.length !== '') ? (
-  								<Thumbnail source={{uri: item.users[0].avatar}} style={styles.avatar} />
-  							) : (
-  								<Thumbnail source={defaultAvatar} style={styles.avatar} />
-  							)}
-  							<View>
-  								<Text note style={styles.defaultTextNote}>{ item.users[0].name}</Text> 
-  								<Text note style={styles.defaultDate}>{moment(item.createdAt).format('lll')}</Text>
-  							</View>
-  						</View>
-  					</Body>
-  					<Right>
-  						<Thumbnail square large source={{uri: item.thumbnail}} style={styles.thumbnail}/>
-  					</Right>
-  				</CardItem>
-  			</Card>
+  			<View style={{margin: 10, borderWidth: 1, borderColor: '#ccc', flexDirection: 'row', padding: 15, flex: 1}}>
+					<View style={{flex: 0.6}}>
+						<View style={{flexDirection: 'column'}}>
+							<Text numberOfLines={2} style={styles.title}>{item.title}</Text>
+							<Text style={styles.content} ellipsizeMode='tail' numberOfLines={1}>{item.content}</Text>
+							<View style={styles.viewFoot}>
+								{(item.users[0].avatar) ? (
+									<Thumbnail source={{uri: item.users[0].avatar}} style={styles.avatar} />
+								) : (
+									<Thumbnail source={defaultAvatar} style={styles.avatar} />
+								)}
+								<View>
+									<Text note style={styles.defaultTextNote}>{item.users[0].name}</Text>
+									<Text note style={styles.defaultDate}>{moment(item.createdAt).format('lll')}</Text>
+								</View>
+							</View>
+						</View>
+					</View>
+					<View style={{flex: 0.4, alignSelf: 'flex-end'}}>
+						<Thumbnail square large source={{uri: item.thumbnail}} style={styles.thumbnail}/>
+					</View>
+  			</View>
   		</TouchableHighlight>
   	)
   }
@@ -92,8 +92,9 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold'
   },
   thumbnail: {
-    width: 100,
-    height: 100
+		flex: 1,
+		alignSelf: 'flex-end',
+		height: 100
   },
 	content: {
 		marginTop: 10,
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
 		fontSize: 12
 	},
 	viewFoot: {
+		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center'
 	},

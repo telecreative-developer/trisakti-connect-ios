@@ -5,7 +5,6 @@ import { Left, Thumbnail, Card, Badge, Right, Body, CardItem, Text, H3 } from 'n
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { setLinkNavigate } from '../../actions/processor'
-import { setNavigate } from "../../actions/processor"
 import { setModeReadNews, setContentReadNews, fetchAllNews, fetchAllNewsRealtime } from '../../actions/news'
 import defaultAvatar from '../../assets/images/default-user.png'
 
@@ -23,19 +22,10 @@ class Headline extends Component<{}, State> {
     await this.props.fetchAllNews(this.props.accessToken)
     await this.props.fetchAllNewsRealtime(this.props.accessToken)
     await this.setState({loading: false})
-	}
+  }
 
 	async handleFullRead(item) {
     await this.props.setLinkNavigate({navigate: 'ModeReadNews', data: item})
-	}
-
-  componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
-  }
-
-  componentWillUnmount() {
-		this.props.setNavigate("", "");
-    BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
 	}
 
 	async handleRefresh() {
@@ -45,7 +35,7 @@ class Headline extends Component<{}, State> {
   }
   
   renderItems = ({item}) => (
-  	<TouchableHighlight onPress={() => this.handleFullRead(item)} >
+  	<TouchableHighlight onPress={() => this.handleFullRead(item)}>
   		<Card>
   			<CardItem cardBody>
   				<Image source={{uri: item.thumbnail}} style={styles.cover}/>
@@ -56,7 +46,7 @@ class Headline extends Component<{}, State> {
   			</CardItem>
   			<CardItem style={styles.cardItem}>
   				<Left>
-  					{(item.users[0].avatar !== '') ? (
+  					{(item.users[0].avatar) ? (
   						<Thumbnail source={{uri: item.users[0].avatar}} style={styles.avatar} />
   					) : (
   						<Thumbnail source={defaultAvatar} style={styles.avatar} />
@@ -101,10 +91,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
-		setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),		
     fetchAllNews: (accessToken) => dispatch(fetchAllNews(accessToken)),
     fetchAllNewsRealtime: (accessToken) => dispatch(fetchAllNewsRealtime(accessToken)),
+    setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),		
 		setModeReadNews: (mode) => dispatch(setModeReadNews(mode)),
 		setContentReadNews: (content) => dispatch(setContentReadNews(content))
 	}

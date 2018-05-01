@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import ImagePicker from 'react-native-image-picker'
-import { Image, TouchableOpacity, FlatList, StyleSheet, Dimensions, View, Alert, BackHandler } from 'react-native'
+import { Image, TouchableHighlight, FlatList, StyleSheet, Dimensions, View, Alert, BackHandler } from 'react-native'
 import { Container, Header, H1, H2, Card, CardItem, Input, FooterTab, List, Item, ListItem, Left, Button, Icon, Body, Right, Content, Title, Footer, Text } from 'native-base'
 import Modal from 'react-native-modal'
 import { connect } from 'react-redux'
 import { isEmpty } from 'validator'
-import { setLinkNavigate } from "../../actions/processor"
 import { addVoteList, publishVoteThumbnail, removeVoteList } from '../../actions/polls'
 import ThemeContainer from '../ThemeContainer'
 
@@ -30,11 +29,13 @@ class CreateVote extends Component {
     this.handleOpenVote = this.handleOpenVote.bind(this)
   }
 
-  componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
-  }
+  componentWillMount() {
+		BackHandler.addEventListener('hardwareBacPress', () => {
+			this.props.navigation.goBack()
+		})
+	}
 
-  componentWillUnmount() {
+	componentWillUnmount() {
 		this.props.setLinkNavigate({navigate: '', data: ''})
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
 	}
@@ -135,11 +136,11 @@ class CreateVote extends Component {
     if(this.state.preview) {
       return (
         <Container style={styles.container}>
-          <Header>
+          <Header style={styles.header}>
             <Left style={{marginRight: 10}}>
               <View>
                 <Button transparent onPress={() => this.setState({preview: false})}>
-                  <Icon name='arrow-back' />
+                  <Icon name='arrow-back' style={{color: '#fff'}} />
                 </Button>
               </View>
             </Left>
@@ -151,7 +152,7 @@ class CreateVote extends Component {
               <H2 style={{fontSize: 18, fontWeight: 'bold'}}>{this.state.title}</H2>
             </View>
             <View style={styles.viewPolls}>
-              <Text style={{fontSize: 18, marginBottom: 10, fontWeight: 'bold'}}>Overview</Text>
+              <Text style={{fontSize: 18, marginBottom: 10, fontWeight: 'bold', fontFamily: 'SourceSansPro'}}>Overview</Text>
               <Text note style={{marginBottom: 10}}>{this.state.content}</Text>
               <Card>
                 <CardItem style={{backgroundColor: '#d35c72'}}>
@@ -217,19 +218,19 @@ class CreateVote extends Component {
 
     return (
       <Container style={styles.container}>
-  			<Header>
+  			<Header style={styles.header}>
   				<Left>
   					<Button transparent onPress={() => this.props.navigation.goBack()}>
-  						<Icon name='close' />
+  						<Icon name='close' style={{color: '#fff'}}/>
   					</Button>
   				</Left>
   				<Body>
-  					<Title>Create Vote</Title>
+  					<Title style={{color: '#fff'}}>Create Vote</Title>
   				</Body>
   				<Right/>
   			</Header>
   			<Content>
-  				<TouchableOpacity onPress={this.handleSelectThumbnail}>
+  				<TouchableHighlight onPress={this.handleSelectThumbnail}>
   					<View style={styles.viewImage}>
   						{(this.state.thumbnail === null) ? (
   							<Icon name='camera' />
@@ -237,7 +238,7 @@ class CreateVote extends Component {
   							<Image source={this.state.thumbnail} style={styles.thumbnail} />
   						)}
   					</View>
-  				</TouchableOpacity>
+  				</TouchableHighlight>
   				<View style={{margin: 10}}>
   					<Input style={{fontSize: 18, fontWeight: 'bold'}} value={this.state.title} placeholder='Title...' onChangeText={(title) => this.setState({title})} />
   					<Input style={{fontSize: 14}} value={this.state.content} placeholder='Content...' onChangeText={(content) => this.setState({content})} />
@@ -270,7 +271,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),
     publishVoteThumbnail: (thumbnail, dataVote, dataChoice, accessToken) => dispatch(publishVoteThumbnail(thumbnail, dataVote, dataChoice, accessToken)),
     removeVoteList: (id) => dispatch(removeVoteList(id)),
     addVoteList: (data) => dispatch(addVoteList(data))
@@ -280,6 +280,9 @@ const mapDispatchToProps = (dispatch) => {
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#FFFFFF'
+	},
+	header:{
+		backgroundColor: '#2989d8',
 	},
 	viewImage: {
 		display: 'flex',

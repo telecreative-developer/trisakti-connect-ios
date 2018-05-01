@@ -1,4 +1,3 @@
-/* @flow */
 import React, { Component } from 'react'
 import { Tabs, Tab, Content } from 'native-base'
 import { connect } from 'react-redux'
@@ -8,22 +7,20 @@ import FriendsRequest from './FriendsRequest'
 class Contacts extends Component<{}> {
 	render() {
 		return (
-			<Tabs initialPage={0} >
-				<Tab heading='Friends'>
+			<Tabs initialPage={0}>
+				<Tab heading="Friends">
 					<Friends />
 				</Tab>
-				<Tab heading='Friends Request'>
-          <FriendsRequest />
+				<Tab heading="Friends Request">
+					<FriendsRequest />
 				</Tab>
 			</Tabs>
 		)
 	}
 }
 
-const mapStateToProps = (state) => {
-	return {
-		fetchFriendRequestSuccess: state.fetchFriendRequestSuccess
-	}
-}
+const mapStateToProps = state => ({
+	fetchFriendRequestSuccess: state.fetchFriendRequestSuccess
+})
 
 export default connect(mapStateToProps)(Contacts)

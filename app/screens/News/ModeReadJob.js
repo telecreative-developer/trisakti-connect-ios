@@ -6,27 +6,33 @@ import { View } from 'react-native'
 import ThemeContainer from '../ThemeContainer'
 import { connect } from 'react-redux'
 import { setLinkNavigate } from '../../actions/processor'
-import { setNavigate } from "../../actions/processor"
 
 const { width } = Dimensions.get('window')
 
 class ModeReadJob extends Component {
 
-  componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      this.handleBack()
+    })
   }
 
   componentWillUnmount() {
-		this.props.setLinkNavigate({navigate: '', data: ''})
+    this.props.setLinkNavigate({navigate: '', data: ''})
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
-	}
-	
+  }
+
+  async handleBack() {
+    await this.props.setLinkNavigate({navigate: '', data: ''})
+    await this.props.navigation.goBack()
+  }
+
 	render() {
 		const { params } = this.props.navigation.state
 		return (
 			<Container style={{backgroundColor: '#FFFFFF'}}>
 				<Content>
-					<View style={{marginTop: 10}}>
+					<View style={{marginTop: 20}}>
 						<H2 style={styles.job_title}>{params.job_title}</H2>
 						<List style={{marginBottom: 10, marginTop: 10}}>
   						<ListItem avatar onPress={() => this.props.setLinkNavigate({navigate: 'PersonProfile', data: params.users[0]})}>
@@ -50,34 +56,29 @@ class ModeReadJob extends Component {
 								<Input style={styles.input} disabled value={params.job_function} />
 							</Item>
 						</Form>
-						
-						<List>
-							<ListItem>
-								<Left>
-									<Text style={styles.table_header}>Experience</Text>
-								</Left>
-								<Body>
-									<Text style={styles.table_header}>Salary</Text>
-								</Body>
-								<Right>
-									<Text style={styles.table_header}>Location</Text>
-								</Right>
-							</ListItem>
-						</List>
+						<View style={{flex: 1, flexDirection: 'row', backgroundColor: '#d35c72', padding: 10}}>
+							<View style={{flex: 0.33}}>
+								<Text style={styles.table_header}>Experience</Text>
+							</View>
+							<View style={{flex: 0.33}}>
+								<Text style={styles.table_header}>Salary</Text>
+							</View>
+							<View style={{flex: 0.33}}>
+								<Text style={styles.table_header}>Location</Text>
+							</View>
+						</View>	
 
-						<List>
-							<ListItem>
-								<Left>
-									<Text style={styles.table_input}>{params.experience}</Text>
-								</Left>
-								<Body>
-									<Text style={styles.table_input}>IDR {params.salary}</Text>
-								</Body>
-								<Right>
-									<Text style={styles.table_input}>{params.work_location}</Text>
-								</Right>
-							</ListItem>
-						</List>				
+						<View style={{flex: 1, flexDirection: 'row', marginTop: 15}}>
+							<View style={{flex: 0.33}}>
+								<Text style={styles.table_input}>{params.experience}</Text>
+							</View>
+							<View style={{flex: 0.33}}>
+								<Text style={styles.table_input}>IDR {params.salary}</Text>
+							</View>
+							<View style={{flex: 0.33}}>
+								<Text style={styles.table_input}>{params.work_location}</Text>
+							</View>
+						</View>	
 
 						<View style={styles.content}>
 							<Text style={styles.textOverview}>{params.overview}</Text>
@@ -122,19 +123,20 @@ const styles = StyleSheet.create({
 	},
 	table_input: {
 		color: '#111',
+		alignSelf: 'center',
 		fontSize: 14
 	},
 	table_header: {
-		color: '#D35C72',
+		color: '#fff',
 		fontSize: 14,
+		alignSelf: 'center',
 		fontWeight: 'bold'
 	}
 })
 
 const mapDispatchToProps = (dispatch) => {
   return {
-		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
-		setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate))
+    setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate))
   }
 }
 

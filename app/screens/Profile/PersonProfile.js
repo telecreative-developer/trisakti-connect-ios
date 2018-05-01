@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, BackHandler } from 'react-native'
+import { StyleSheet, View, BackHandler, StatusBar } from 'react-native'
 import { connect } from 'react-redux'
 import { Container, Header, Left, Form, Item, Label, Input, Button, Spinner, Body, Content, Thumbnail, Text, Icon, Right, Title, List, ListItem } from 'native-base'
 import { sendRequestFriend, checkFriendStatus } from '../../actions/users'
 import ThemeContainer from '../ThemeContainer'
 import { setLinkNavigate } from '../../actions/processor'
-import { setNavigate } from "../../actions/processor"
 import defaultPhotoProfile from '../../assets/images/default-user.png'
 
 class PersonProfile extends Component {
@@ -18,19 +17,24 @@ class PersonProfile extends Component {
 
 		this.handleSendFriendRequest = this.handleSendFriendRequest.bind(this)
   }
-	
+  
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      this.handleBack()
+    })
+  }
+
+  componentWillUnmount() {
+    this.props.setLinkNavigate({navigate: '', data: ''})
+    BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
+  }
+
 	async componentDidMount() {
-		BackHandler.addEventListener("hardwareBackPress", this.backPressed);
 		const { params } = await this.props.navigation.state
 		const { session } = await this.props
     await this.props.checkFriendStatus(session.id, params.id, session.accessToken)
 	}
-	
-  componentWillUnmount() {
-		this.props.setLinkNavigate({navigate: '', data: ''})
-    BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
-	}
-	
+
 	async handleBack() {
 		await this.props.navigation.goBack()
 		await this.props.setLinkNavigate({navigate: '', data: ''})
@@ -109,14 +113,18 @@ class PersonProfile extends Component {
 		const { params } = this.props.navigation.state
 		return (
 			<Container style={styles.container}>
-				<Header hasTabs>
+				<StatusBar
+					backgroundColor="#fff"
+					barStyle="light-content"
+				/>
+				<Header hasTabs style={styles.header}>
 					<Left>
 						<Button transparent onPress={() => this.handleBack()}>
-							<Icon name='arrow-back' />
+							<Icon name='arrow-back' style={{color: '#fff'}}/>
 						</Button>
 					</Left>
 					<Body>
-						<Title>Profile</Title>
+						<Title style={{color: '#fff'}}>Profile</Title>
 					</Body>
 					<Right />
 				</Header>
@@ -183,7 +191,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),
-		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
 		sendRequestFriend: (data, accessToken) => dispatch(sendRequestFriend(data, accessToken)),
 		checkFriendStatus: (myid, iduser, accessToken) => dispatch(checkFriendStatus(myid, iduser, accessToken))
 	}
@@ -192,6 +199,9 @@ const mapDispatchToProps = (dispatch) => {
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#FFFFFF'
+	},
+	header:{
+		backgroundColor: '#2989d8',
 	},
 	contentProfile: {
 		display: 'flex',

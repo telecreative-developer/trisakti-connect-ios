@@ -1,15 +1,13 @@
 /* @flow */
 import React, { Component } from 'react'
-import { Image, Dimensions, BackHandler, View, FlatList, StyleSheet, AsyncStorage, Alert } from 'react-native'
+import { Image, Dimensions, BackHandler, View, FlatList, StyleSheet, AsyncStorage, Alert, StatusBar, TouchableHighlight } from 'react-native'
 import { Container, Header, Icon, Item, Fab, Input, Card, CardItem, Thumbnail, Left, ListItem, H2, Content, Text, Button, Body, Title, List, Right, Badge } from 'native-base'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { isEmpty } from 'validator'
 import Modal from 'react-native-modal'
-import Entypo from 'react-native-vector-icons/Entypo'
 import { sendComment, addClaps, fetchCommentsRealtime, fetchComments } from '../../actions/news'
 import { setLinkNavigate } from '../../actions/processor'
-import { setNavigate } from "../../actions/processor"
 import defaultPhotoProfile from '../../assets/images/default-user.png'
 import ThemeContainer from '../ThemeContainer'
 
@@ -39,18 +37,29 @@ class ModeReadNews extends Component<{}, State> {
     this.props.fetchComments(this.props.session.accessToken)
   }
   
-	componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      if(!this.state.close) {
+				this.setState({close: true})
+			}else{
+				this.handleBack()	
+			}
+    })
   }
 
 	componentWillUnmount() {
 		const { clapsCount } = this.state
 		const { params } = this.props.navigation.state
 		this.props.addClaps(params.id_news, clapsCount, this.props.session.accessToken)
-		this.props.setLinkNavigate({navigate: '', data: ''})
-    BackHandler.removeEventListener('hardwareBackPress', this.backPressed);
-	}
-	
+    this.props.setLinkNavigate({navigate: '', data: ''})
+    BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
+  }
+  
+  async handleBack() {
+		await this.props.navigation.goBack()
+		await this.props.setLinkNavigate({navigate: '', data: ''})
+  }
+
   renderItems = ({item}) => (
   	<ListItem avatar style={{marginBottom: 10}}>
   		<Left>
@@ -73,7 +82,8 @@ class ModeReadNews extends Component<{}, State> {
   key = (item, index) => index
 
   handleOpenComment() {
-  	this.setState({openComment: true})
+		this.setState({openComment: true})
+		console.log("Tampan");
   }
 
   handleCloseComment() {
@@ -133,6 +143,10 @@ class ModeReadNews extends Component<{}, State> {
   	}
   	return (
   		<Container style={styles.container}>
+				<StatusBar
+					backgroundColor="#fff"
+					barStyle="light-content"
+				/>
   			<Content>
   				<Image source={{uri: params.thumbnail}} style={styles.cover} />
   				<View style={styles.viewNews}>
@@ -175,8 +189,10 @@ class ModeReadNews extends Component<{}, State> {
   						</Right>
   					</CardItem>
   				</Card>
-  				<View style={{margin:'auto', padding:20, justifyContent:'center', alignItems:'center'}}>
-  					<Button onPress={() => this.handleOpenComment()} style={{width:370, borderRadius:0, backgroundColor:'transparent', borderWidth:2, borderColor:'#ccc'}}><Text style={{color:'#ccc'}}> Write Comment.. </Text></Button> 
+  				<View style={styles.viewInputComment}>
+  					<TouchableHighlight style={{borderWidth: 1, borderColor: '#ccc', padding: 10}} onPress={() => this.handleOpenComment()}>
+							<Text style={{fontSize: 12, color: '#ccc'}}>Write your comment</Text>
+						</TouchableHighlight>
   				</View>
   				<View>
   					<FlatList
@@ -200,7 +216,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),
-		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
 		addClaps: (id, claps, accessToken) => dispatch(addClaps(id, claps, accessToken)),
 		sendComment: (comment, accessToken) => dispatch(sendComment(comment, accessToken)),
     fetchComments: (accessToken) => dispatch(fetchComments(accessToken)),
@@ -233,6 +248,9 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		marginBottom: 10,
 		fontWeight: 'bold'
+	},
+	viewInputComment: {
+		margin: 20
 	},
 	viewProfileText: {
 		marginBottom: 10

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, TouchableHighlight, Alert, BackHandler } from 'react-native'
+import { StyleSheet, View, TouchableHighlight, Alert, BackHandler, StatusBar } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 import { saveSession, editProfileWithAvatar, editProfileWithoutAvatar } from '../../actions/users'
 import { Container, Picker, Thumbnail, Badge, Header, Left, Body, Icon, Content, Text, Spinner, Item, Label, Input, Button, Form } from 'native-base'
@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { fetchFaculties, fetchMajors } from '../../actions/users'
-import { setLinkNavigate, setNavigate } from '../../actions/processor'
+import { setLinkNavigate } from '../../actions/processor'
 
 class EditProfile extends Component {
   constructor() {
@@ -32,6 +32,7 @@ class EditProfile extends Component {
 			facebook: '',
 			twitter: '',
 			linkedin: '',
+      instagram: '',
 			changeUri: false,
 			colorDisabled: '#C7C7C7',
 			isDateTimePickerVisible: false
@@ -41,7 +42,7 @@ class EditProfile extends Component {
   componentWillMount() {
 		this.props.fetchDataFaculties()
 		this.props.fetchDataMajors()
-    BackHandler.addEventListener('hardwareBackPress', this.backPressed, () => {
+    BackHandler.addEventListener('hardwareBackPress', () => {
       this.handleBack()
     })
 	}
@@ -60,14 +61,15 @@ class EditProfile extends Component {
 			id_faculty: this.props.dataUser.faculties[0].id_faculty,
 			facebook:  this.props.dataUser.facebook,
 			twitter:  this.props.dataUser.twitter,
-			linkedin:  this.props.dataUser.linkedin
+			linkedin:  this.props.dataUser.linkedin,
+      instagram: this.props.dataUser.instagram
 		})
   }
 
   componentWillUnmount() {
-		this.props.setLinkNavigate({navigate: '', data: ''})
+    this.props.setLinkNavigate({navigate: '', data: ''})
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
-  }
+	}
 	
 	onValueChangeFaculty(value) {
 		this.setState({
@@ -87,9 +89,9 @@ class EditProfile extends Component {
   }
   
 	async handleSaveProfile() {
-		const { id, name, avatarBase64, avatar, email, address, phone, graduated, password, id_major, id_faculty, facebook, twitter, linkedin } = await this.state
-		let dataWithAvatar = await { name, avatar: avatarBase64, email, address, phone, graduated, password, id_major, id_faculty, facebook, twitter, linkedin }
-		let dataWithoutAvatar = await { name, email, address, phone, graduated, password, id_major, id_faculty, facebook, twitter, linkedin }
+		const { id, name, avatarBase64, email, address, phone, graduated, password, id_major, id_faculty, facebook, twitter, linkedin, instagram } = await this.state
+		let dataWithAvatar = await { name, avatar: avatarBase64, email, address, phone, graduated, password, id_major, id_faculty, facebook, twitter, linkedin, instagram }
+		let dataWithoutAvatar = await { name, email, address, phone, graduated, password, id_major, id_faculty, facebook, twitter, linkedin, instagram }
 		if(this.state.avatarBase64 === '') {
 			await this.props.editProfileWithoutAvatar(id, dataWithoutAvatar, this.props.session.accessToken)
 		}else{
@@ -127,21 +129,25 @@ class EditProfile extends Component {
 	render() {
 		return (
 			<Container style={styles.container}>
+				<StatusBar
+					backgroundColor="#fff"
+					barStyle="light-content"
+				/>
 				<DateTimePicker
 					isVisible={this.state.isDateTimePickerVisible}
 					onConfirm={(date) => this.handleDatePicked(date)}
 					onCancel={() => this.setState({isDateTimePickerVisible: false})} />
-				<Header>
+				<Header style={styles.header}>
 					<Left>
 						<Button transparent onPress={() => this.handleBack()}>
-							<Icon name='arrow-back' />
+							<Icon name='arrow-back' style={{color: '#fff'}}/>
 						</Button>
 					</Left>
 					<Body />
 				</Header>
 				<Content>
 					<View style={styles.contentProfile}>
-						{(this.state.avatar !== '' || this.state.avatarBase64 !== '') ? (
+						{(this.state.avatar || this.state.avatarBase64 ) ? (
 							<TouchableHighlight onPress={() => this.handlePickImage()}>
 								<View>
 									<Thumbnail large source={{uri: (this.state.avatarBase64 === '') ?  this.state.avatar :  this.state.avatarBase64}} />
@@ -220,6 +226,10 @@ class EditProfile extends Component {
 							<Label>Linkedin</Label>
 							<Input onChangeText={(linkedin) => this.setState({linkedin})} value={this.state.linkedin} />
 						</Item>
+            <Item stackedLabel>
+              <Label>Instagram</Label>
+              <Input onChangeText={(instagram) => this.setState({instagram})} value={this.state.instagram} />
+            </Item>
 					</Form>
 					<View style={styles.viewButtonSaveProfile}>
 						<Button block rounded onPress={() => this.handleSaveProfile()}>
@@ -236,31 +246,29 @@ class EditProfile extends Component {
 	}
 }
 
-const mapStateToProps = (state) => {
-	return {
-		session: state.session,
-		dataUser: state.dataUser,
-		loading: state.loading,
-		dataFaculties: state.dataFaculties,
-		dataMajors: state.dataMajors
-	}
-} 
+const mapStateToProps = (state) => ({
+	session: state.session,
+	dataUser: state.dataUser,
+	loading: state.loading,
+	dataFaculties: state.dataFaculties,
+	dataMajors: state.dataMajors
+})
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),
-		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
-		fetchDataFaculties: () => dispatch(fetchFaculties()),
-		fetchDataMajors: () => dispatch(fetchMajors()),
-		editProfileWithAvatar: (id, avatar, data, accessToken) => dispatch(editProfileWithAvatar(id, avatar, data, accessToken)),
-		editProfileWithoutAvatar: (id, data, accessToken) => dispatch(editProfileWithoutAvatar(id, data, accessToken)),
-		saveSession: (id, name, avatar, email, facebook, twitter, linkedin, accessToken) => dispatch(saveSession(id, name, avatar, email, facebook, twitter, linkedin, accessToken)),
-	}
-}
+const mapDispatchToProps = (dispatch) => ({
+	fetchDataFaculties: () => dispatch(fetchFaculties()),
+	fetchDataMajors: () => dispatch(fetchMajors()),
+	setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),
+	editProfileWithAvatar: (id, avatar, data, accessToken) => dispatch(editProfileWithAvatar(id, avatar, data, accessToken)),
+	editProfileWithoutAvatar: (id, data, accessToken) => dispatch(editProfileWithoutAvatar(id, data, accessToken)),
+	saveSession: (id, name, avatar, email, facebook, twitter, linkedin, accessToken) => dispatch(saveSession(id, name, avatar, email, facebook, twitter, linkedin, accessToken))
+})
 
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#FFFFFF'
+	},
+	header:{
+		backgroundColor: '#2989d8',
 	},
 	contentProfile: {
 		display: 'flex',

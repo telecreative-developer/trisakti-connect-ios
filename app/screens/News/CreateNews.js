@@ -4,9 +4,9 @@ import ImagePicker from 'react-native-image-picker'
 import { connect } from 'react-redux'
 import { publishNews } from '../../actions/news'
 import { isEmpty } from 'validator'
-import { setLinkNavigate } from "../../actions/processor"
 import { Container, Header, Content, FooterTab, Left, Footer, ListItem, H1, Input, Body, Right, Text, Button, Icon, Title } from 'native-base'
 import ThemeContainer from '../ThemeContainer'
+import { setLinkNavigate } from '../../actions/processor'
 
 const { height, width } = Dimensions.get('window')
 
@@ -44,11 +44,13 @@ class CreateNews extends Component {
 		this.handlePublishNews = this.handlePublishNews.bind(this)
 	}
 
-	componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
-  }
+	componentWillMount() {
+		BackHandler.addEventListener('hardwareBacPress', () => {
+			this.handleBack()
+		})
+	}
 
-  componentWillUnmount() {
+	componentWillUnmount() {
 		this.props.setLinkNavigate({navigate: '', data: ''})
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
 	}
@@ -125,14 +127,14 @@ class CreateNews extends Component {
   	if(this.state.preview) {
   		return (
   			<Container style={styles.container}>
-  				<Header>
+  				<Header style={styles.header}>
   					<Left>
   						<Button transparent onPress={() => this.setState({preview: false})}>
-  							<Icon name='arrow-back' />
+  							<Icon name='arrow-back' style={{color: '#fff'}}/>
   						</Button>
   					</Left>
   					<Body>
-  						<Title>Preview</Title>
+  						<Title style={{color: '#fff'}}>Preview</Title>
   					</Body>
   					<Right />
   				</Header>
@@ -141,9 +143,9 @@ class CreateNews extends Component {
   						<Image source={this.state.thumbnail} style={styles.thumbnail} />
   					</View>
   					<View style={styles.viewNews}>
-  						<H1 style={{ fontSize: 18, fontWeight: 'bold'}}>{this.state.title}</H1>
-  						<Text style={{ fontSize: 14}} note>{this.state.category}</Text>
-  						<Text style={{ fontSize: 14}}>{this.state.content}</Text>
+  						<H1 style={{fontSize: 18, fontWeight: 'bold'}}>{this.state.title}</H1>
+  						<Text style={{fontSize: 14}} note>{this.state.category}</Text>
+  						<Text style={{fontSize: 14}}>{this.state.content}</Text>
   					</View>
   				</Content>
   				<Footer>
@@ -181,14 +183,14 @@ class CreateNews extends Component {
   	}
   	return (
   		<Container style={styles.container}>
-  			<Header>
+  			<Header style={styles.header}>
   				<Left>
   					<Button transparent onPress={() => this.props.navigation.goBack()}>
-  						<Icon name='close' />
+  						<Icon name='close' style={{color: '#fff'}}/>
   					</Button>
   				</Left>
   				<Body>
-  					<Title>Create News</Title>
+  					<Title style={{color: '#fff'}}>Create News</Title>
   				</Body>
   				<Right/>
   			</Header>
@@ -203,20 +205,20 @@ class CreateNews extends Component {
   					</View>
   				</TouchableOpacity>
   				<View style={{margin: 10}}>
-  					<Input value={this.state.title} placeholder='Title...' style={{fontSize: 18,  fontWeight: 'bold'}} onChangeText={(title) => this.setState({title})} />
-  					<Input multiline style={{ fontSize: 14}} value={this.state.content} placeholder='Content...' onChangeText={(content) => this.setState({content})} />
+  					<Input value={this.state.title} placeholder='Title...' style={{fontSize: 18, fontWeight: 'bold'}} onChangeText={(title) => this.setState({title})} />
+  					<Input multiline style={{fontSize: 14}} value={this.state.content} placeholder='Content...' onChangeText={(content) => this.setState({content})} />
   				</View>
   			</Content>
   			<Footer style={{backgroundColor: '#f2f2f2'}}>
   				<Left>
   					<Button transparent onPress={() => this.setState({openCategory: true})}>
   						<Icon name='pricetag' style={{marginRight: -10}} />
-  						<Text style={{ fontSize: 16}}>{this.state.category}</Text>
+  						<Text style={{fontSize: 16}}>{this.state.category}</Text>
   					</Button>
   				</Left>
   				<Right>
   					<Button transparent onPress={() => this.setState({preview: true})}>
-  						<Text style={{ fontSize: 16}}>Preview</Text>
+  						<Text style={{fontSize: 16}}>Preview</Text>
   					</Button>
   				</Right>
   			</Footer>
@@ -242,6 +244,9 @@ const mapDispatchToProps = (dispatch) => {
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#FFFFFF'
+	},
+	header:{
+		backgroundColor: '#2989d8',
 	},
 	viewImage: {
 		display: 'flex',

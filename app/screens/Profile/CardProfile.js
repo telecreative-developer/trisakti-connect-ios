@@ -1,22 +1,35 @@
 import React, { Component } from 'react'
 import QRCode from 'react-native-qrcode'
-import { Container, Content, Button, Text, Card, Thumbnail, Icon, Left, Header, Body, Title, Right } from 'native-base'
-import { StyleSheet, View, BackHandler, Image } from 'react-native'
+import { Container, Content, Button, Text, Card, Thumbnail, Icon, Left, Header, Body, Title, Right, Footer } from 'native-base'
+import { StyleSheet, View, BackHandler, Image, Dimensions } from 'react-native'
 import { connect } from 'react-redux'
 import ThemeContainer from '../ThemeContainer'
 import { setLinkNavigate } from '../../actions/processor'
-import { setNavigate } from "../../actions/processor"
 import trisaktiConnectLogo from '../../assets/images/logo-membership.png'
 import moment from 'moment'
+import card from '../../assets/images/member-card.png'
+import Modal from 'react-native-modal'
+
+const { width, height } = Dimensions.get('window')
 
 class CardProfile extends Component {
+  constructor() {
+    super()
 
-  componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
+    this.state = {
+      orientation: 'POTRAIT',
+      isModalCode: false
+    }
+  }
+
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      this.handleBack()
+    })
   }
 
   componentWillUnmount() {
-		this.props.setLinkNavigate({navigate: '', data: ''})
+    this.props.setLinkNavigate({navigate: '', data: ''})
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
   }
 
@@ -28,48 +41,72 @@ class CardProfile extends Component {
   render() {
     const { dataUser } = this.props
     return (
-      <Container style={styles.container}>
-        <Header>
-          <Left>
-            <Button transparent onPress={() => this.handleBack()}>
-              <Icon name='arrow-back' />
-            </Button>
-          </Left>
-          <Body />
-        </Header>
-        <Content style={{paddingHorizontal: 20, paddingVertical: 20, borderRadius: 10}}>
-          <Card style={{borderRadius: 10, marginBottom: 20}}>
-            <View style={styles.viewImageLogo}>
-              <Image source={trisaktiConnectLogo} style={styles.imageLogo} />
-            </View>
-            <View style={{margin: 10, alignItems: 'center'}}>
-              <View style={styles.viewQrCode}>
-                <QRCode
-                  value={`${dataUser.nim}`}
-                  size={150} />
+      <Container
+        style={styles.container}
+        onLayout={(e) => e.nativeEvent.layout.width > e.nativeEvent.layout.height ?
+          this.setState({orientation: 'LANDSCAPE'}) : this.setState({orientation: 'POTRAIT'})}>
+        <Modal
+          isVisible = {this.state.isModalCode} style={styles.modal}
+          onBackButtonPress={() => this.setState({ isModalCode: false })}
+          onBackdropPress={() => this.setState({ isModalCode: false })}>
+          <View style={styles.modalContent}>
+            <QRCode
+              value={`${dataUser.nim}`}
+              size={150} />
+          </View>
+        </Modal>
+        {this.state.orientation === 'POTRAIT' && (
+          <Header style={styles.header}>
+            <Left>
+              <Button transparent onPress={() => this.handleBack()}>
+                <Icon name='arrow-back' style={{color: '#fff'}} />
+              </Button>
+            </Left>
+            <Body />
+          </Header>
+        )}
+        {this.state.orientation === 'POTRAIT' ? (
+          <View style={{flex: 1}}>
+            <View style={{flexDirection:'column'}}>
+              <View>
+                <View style={styles.contentView}>
+                  <Text style={styles.nim}>{dataUser.nim}</Text>
+                  <Text style={styles.name}>{dataUser.name}</Text>
+                  <Text style={styles.phone}>{dataUser.phone}</Text>
+                  <Text style={styles.email}>{dataUser.email}</Text>
+                  <Text style={styles.address}>{dataUser.address}</Text>
+                </View>
+                <View style={styles.cardView}>
+                  <Image source={card} style={styles.cardImagePotrait}/>
+                </View>
               </View>
-              <View style={{alignItems: 'center'}}>
-              <Text style={styles.dataNumeric}>{dataUser.nim}</Text>
-              </View>
             </View>
-            <View style={styles.card}>
-              <View style={styles.viewDescription}>
-                <View style={styles.label}>
-                  <Text style={styles.dataName}>{dataUser.name}</Text>
+          </View>
+          ) : (
+          <View style={{flex: 1}}>
+            <View style={{flexDirection:'row'}}>
+              <View style={{flex:0.2}}></View>
+              <View style={{flex:0.6}}>
+                <View style={styles.contentView}>
+                  <Text style={styles.nim}>{dataUser.nim}</Text>
+                  <Text style={styles.name}>{dataUser.name}</Text>
+                  <Text style={styles.phone}>{dataUser.phone}</Text>
+                  <Text style={styles.email}>{dataUser.email}</Text>
+                  <Text style={styles.address}>{dataUser.address}</Text>
                 </View>
-                <View style={styles.label}>
-                  <Text style={styles.dataStyle}>{dataUser.phone}</Text>
-                </View>
-                <View style={styles.label}>
-                  <Text style={styles.dataEmail}>{dataUser.email}</Text>
-                </View>
-                <View style={styles.label}>
-                  <Text style={styles.dataAddress}>{dataUser.address}</Text>
+                <View style={styles.cardView}>
+                  <Image source={card} style={styles.cardImageLandscape}/>
                 </View>
               </View>
+              <View style={{flex:0.2}}></View>
             </View>
-          </Card>
-        </Content>
+          </View>
+        )}
+        <Footer style={styles.footer}>
+          <Button full style={styles.button} onPress={() => this.setState({isModalCode: true})}>
+            <Text>QR Code</Text>
+          </Button>
+        </Footer>
       </Container>
     )
   }
@@ -83,8 +120,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),
-    setNavigate: (link, data) => dispatch(setNavigate(link, data)),
+    setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate))
   }
 }
 
@@ -92,6 +128,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFFFFF',
   },
+	header:{
+		backgroundColor: '#2989d8',
+	},
   viewDescription: {
     flex: 1,
     margin: 20,
@@ -106,9 +145,22 @@ const styles = StyleSheet.create({
     height: 45,
     width: '84%'
   },
-  card: {
-    display: 'flex',
-    flexDirection: 'row'
+  cardView:{
+    flexDirection: 'column'
+  },
+  cardImagePotrait: {
+    width: 360,
+    height: 360,
+    marginTop: 30,
+    position: 'absolute',
+    zIndex: 0
+  },
+  cardImageLandscape: {
+    width: 400,
+    height: 410,
+    marginTop: 30,
+    position: 'absolute',
+    zIndex: 0
   },
   label: {
     marginBottom: 10
@@ -140,6 +192,58 @@ const styles = StyleSheet.create({
   dataStyle: {
     fontFamily: 'Quantico',
     fontSize: 12
+  },
+  footer: {
+    height: height / 12,
+  },
+  button: {
+    flex: 1,
+    height: '100%',
+    width: '100%'
+  },
+  nim: {
+    fontSize: 14,
+    textAlign: 'right',
+    fontFamily: 'Orbitron',
+    color: '#fff',
+  },
+  name: {
+    fontSize: 14,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  phone: {
+    fontSize: 14,
+    color: '#fff',
+    fontWeight: 'bold'
+  },
+  email: {
+    fontSize: 14,
+    color: '#fff',
+    fontWeight: 'bold'
+  },
+  address: {
+    fontSize: 14,
+    color: '#fff',
+    fontWeight: 'bold'
+  },
+  contentView: {
+    position: 'absolute',
+    justifyContent: 'center',
+    zIndex: 999,
+    top: height / 6,
+    left: width / 10
+  },
+  modal: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  modalContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 300,
+    height: 300,
+    backgroundColor: '#fff'
   }
 })
 

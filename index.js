@@ -30,6 +30,10 @@ import ContactsChat from './app/screens/Chats/ContactsChat'
 import CreateNews from './app/screens/News/CreateNews'
 import CreateJob from './app/screens/News/CreateJob'
 import CreateVote from './app/screens/News/CreateVote'
+import AddShopScreen from './app/screens/Shop/AddShop'
+import ShopScreen from './app/screens/Shop/index'
+import DetailCategoryScreen from './app/screens/Shop/DetailCategory'
+import DetailItemScreen from './app/screens/Shop/DetailItem'
 
 const App = StackNavigator({
 	Splash: {screen: SplashScreen},
@@ -40,6 +44,10 @@ const App = StackNavigator({
 	News: {screen: NewsScreen},
 	Chats: {screen: ChatsScreen},
 	Search: {screen: SearchScreen},
+	Shop: { screen: ShopScreen },
+	AddShop: { screen: AddShopScreen },
+	DetailCategory: { screen: DetailCategoryScreen },
+	DetailItem: { screen: DetailItemScreen },
 	Options: {screen: OptionsScreen},
 	PersonProfile: {screen: PersonProfile},
 	ModeReadNews: {screen: ModeReadNews},
@@ -54,9 +62,6 @@ const App = StackNavigator({
 	CreateVote: {screen: CreateVote}
 }, {
 	headerMode: 'none'
-	// navigationOptions: {
-	// 	gesturesEnabled: false,
-	// },
 })
 
 const store = Reactotron.createStore(reducers, applyMiddleware(thunk))

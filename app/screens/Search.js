@@ -6,7 +6,6 @@ import { searchUser, searchNews, searchVote, searchCareer } from '../actions/sea
 import { connect } from 'react-redux'
 import defaultAvatar from '../assets/images/default-user.png'
 import { setLinkNavigate } from '../actions/processor'
-import { setNavigate } from "../actions/processor"
 import { fetchPollsAnswers, checkHasVoted, fetchPollsAnswersRealtime } from '../actions/polls'
 import moment from 'moment'
 
@@ -29,15 +28,21 @@ class Search extends Component {
 		this.handleResetText = this.handleResetText.bind(this)
 	}
 
-	componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.backPressed);
-  }
+	componentWillMount() {
+		BackHandler.addEventListener('hardwareBackPress', () => {
+			this.handleBack()
+		})
+	}
 
-  componentWillUnmount() {
+	componentWillUnmount() {
 		this.props.setLinkNavigate({navigate: '', data: ''})
     BackHandler.removeEventListener("hardwareBackPress", this.backPressed);
-  }
+	}
 
+	async handleBack() {
+		await this.props.navigation.goBack()
+		await this.props.setLinkNavigate({navigate: '', data: ''})
+	}
 
 	async handleTypeSearch(value) {
 		await this.setState({search: value})
@@ -101,10 +106,10 @@ class Search extends Component {
   			<Card avatar>
   				<CardItem>
   					<Body>
-  						<Text numberOfLines={1} style={styles.title}>{item.title}</Text>
+  						<Text numberOfLines={2} style={styles.title}>{item.title}</Text>
   						<Text note style={styles.content} ellipsizeMode='tail' numberOfLines={2}>{item.content}</Text>
   						<View style={styles.viewFoot}>
-  							{(item.users[0].avatar.length !== '') ? (
+  							{(item.users[0].avatar) ? (
   								<Thumbnail source={{uri: item.users[0].avatar}} style={styles.avatar} />
   							) : (
   								<Thumbnail source={defaultAvatar} style={styles.avatar} />
@@ -130,8 +135,8 @@ class Search extends Component {
   			<Card>
   				<CardItem>
   					<Body>
-  						<Text>{item.title_poll}</Text>
-  						<Text note numberOfLines={1} ellipsizeMode='tail'>{item.content_poll}</Text>
+  						<Text style={{}}>{item.title_poll}</Text>
+  						<Text note numberOfLines={2} ellipsizeMode='tail'>{item.content_poll}</Text>
   					</Body>
   					<Right>
   						{(item.avatar !== '') ? (
@@ -156,7 +161,7 @@ class Search extends Component {
   						<Text note style={styles.company}>{item.company}</Text>
   						<Text note style={styles.content} ellipsizeMode='tail' numberOfLines={3}>{item.overview}</Text>
   						<View style={styles.viewFoot}>
-  							{(item.users[0].avatar.length !== '') ? (
+  							{(item.users[0].avatar) ? (
   								<Thumbnail source={{uri: item.users[0].avatar}} style={styles.avatar} />
   							) : (
   								<Thumbnail source={defaultAvatar} style={styles.avatar} />
@@ -177,64 +182,64 @@ class Search extends Component {
 	
 	viewHeaderResultUser() {
 		if(this.state.search === '' && this.props.resultUser.length !== 0) {
-			return <Text style={{fontStyle: 'italic'}}>{`Recently Search`}</Text>
+			return <Text style={{fontStyle: 'italic' }}>{`Recently Search`}</Text>
 		}else{
 			if(this.state.search === '' && this.props.resultUser.length === 0) {
 				return <View />
 			}else if(this.props.resultUser.length === 1){
-				return <Text style={{fontStyle: 'italic'}}>{`Result for "${this.state.search}": ${this.props.resultUser.length} person`}</Text>
+				return <Text style={{fontStyle: 'italic' }}>{`Result for "${this.state.search}": ${this.props.resultUser.length} person`}</Text>
 			}else if(this.props.resultUser.length === 0){
-				return <Text style={{fontStyle: 'italic'}}>{`No result found for "${this.state.search}"`}</Text>
+				return <Text style={{fontStyle: 'italic' }}>{`No result found for "${this.state.search}"`}</Text>
 			}else{
-				return <Text style={{fontStyle: 'italic'}}>{`Results for "${this.state.search}": ${this.props.resultUser.length} persons`}</Text>
+				return <Text style={{fontStyle: 'italic' }}>{`Results for "${this.state.search}": ${this.props.resultUser.length} persons`}</Text>
 			}
 		}
 	}
 
 	viewHeaderResultNews() {
 		if(this.state.search === '' && this.props.resultNews.length !== 0) {
-			return <Text style={{fontStyle: 'italic'}}>{`Recently Search`}</Text>
+			return <Text style={{fontStyle: 'italic' }}>{`Recently Search`}</Text>
 		}else{
 			if(this.state.search === '' && this.props.resultNews.length === 0) {
 				return <View />
 			}else if(this.props.resultNews.length === 1){
-				return <Text style={{fontStyle: 'italic'}}>{`Result for "${this.state.search}": ${this.props.resultNews.length} news`}</Text>
+				return <Text style={{fontStyle: 'italic' }}>{`Result for "${this.state.search}": ${this.props.resultNews.length} news`}</Text>
 			}else if(this.props.resultNews.length === 0){
-				return <Text style={{fontStyle: 'italic'}}>{`No result found for "${this.state.search}"`}</Text>
+				return <Text style={{fontStyle: 'italic' }}>{`No result found for "${this.state.search}"`}</Text>
 			}else{
-				return <Text style={{fontStyle: 'italic'}}>{`Results for "${this.state.search}": ${this.props.resultNews.length} news`}</Text>
+				return <Text style={{fontStyle: 'italic' }}>{`Results for "${this.state.search}": ${this.props.resultNews.length} news`}</Text>
 			}
 		}
 	}
 
 	viewHeaderResultVoting() {
 		if(this.state.search === '' && this.props.resultVote.length !== 0) {
-			return <Text style={{fontStyle: 'italic'}}>{`Recently Search`}</Text>
+			return <Text style={{fontStyle: 'italic' }}>{`Recently Search`}</Text>
 		}else{
 			if(this.state.search === '' && this.props.resultVote.length === 0) {
 				return <View />
 			}else if(this.props.resultVote.length === 1){
-				return <Text style={{fontStyle: 'italic'}}>{`Result for "${this.state.search}": ${this.props.resultVote.length} voting`}</Text>
+				return <Text style={{fontStyle: 'italic' }}>{`Result for "${this.state.search}": ${this.props.resultVote.length} voting`}</Text>
 			}else if(this.props.resultVote.length === 0){
-				return <Text style={{fontStyle: 'italic'}}>{`No result found for "${this.state.search}"`}</Text>
+				return <Text style={{fontStyle: 'italic' }}>{`No result found for "${this.state.search}"`}</Text>
 			}else{
-				return <Text style={{fontStyle: 'italic'}}>{`Results for "${this.state.search}": ${this.props.resultVote.length} votings`}</Text>
+				return <Text style={{fontStyle: 'italic' }}>{`Results for "${this.state.search}": ${this.props.resultVote.length} votings`}</Text>
 			}
 		}
 	}
 
 	viewHeaderResultCareer() {
 		if(this.state.search === '' && this.props.resultCareer.length !== 0) {
-			return <Text style={{fontStyle: 'italic'}}>{`Recently Search`}</Text>
+			return <Text style={{fontStyle: 'italic' }}>{`Recently Search`}</Text>
 		}else{
 			if(this.state.search === '' && this.props.resultCareer.length === 0) {
 				return <View />
 			}else if(this.props.resultCareer.length === 1){
-				return <Text style={{fontStyle: 'italic'}}>{`Result for "${this.state.search}": ${this.props.resultCareer.length} career`}</Text>
+				return <Text style={{fontStyle: 'italic' }}>{`Result for "${this.state.search}": ${this.props.resultCareer.length} career`}</Text>
 			}else if(this.props.resultCareer.length === 0){
-				return <Text style={{fontStyle: 'italic'}}>{`No result found for "${this.state.search}"`}</Text>
+				return <Text style={{fontStyle: 'italic' }}>{`No result found for "${this.state.search}"`}</Text>
 			}else{
-				return <Text style={{fontStyle: 'italic'}}>{`Results for "${this.state.search}": ${this.props.resultCareer.length} careers`}</Text>
+				return <Text style={{fontStyle: 'italic' }}>{`Results for "${this.state.search}": ${this.props.resultCareer.length} careers`}</Text>
 			}
 		}
 	}
@@ -314,7 +319,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setNavigate: (link, data) => dispatch(setNavigate(link, data)),
 		setLinkNavigate: (navigate) => dispatch(setLinkNavigate(navigate)),
 		searchUser: (name) => dispatch(searchUser(name)),
 		searchNews: (title, accessToken) => dispatch(searchNews(title, accessToken)),
