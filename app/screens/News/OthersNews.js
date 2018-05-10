@@ -88,7 +88,7 @@ const mapDispatchToProps = (dispatch) => {
 const styles = StyleSheet.create({
 	title: {
 		flex: 1,
-		fontSize: 18,
+		fontSize: 16,
 		fontWeight: 'bold'
   },
   thumbnail: {
@@ -109,7 +109,8 @@ const styles = StyleSheet.create({
 	avatar: {
 		width: 30,
 		height: 30,
-		marginRight: 10
+		marginRight: 10,
+		borderRadius: 15
 	},
 	defaultTextNote: {
 		color: '#D35C72',

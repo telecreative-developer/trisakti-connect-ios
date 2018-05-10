@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   cardImagePotrait: {
-    width: 360,
+    width: '100%',
     height: 360,
     marginTop: 30,
     position: 'absolute',
@@ -202,28 +202,29 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   nim: {
-    fontSize: 14,
-    textAlign: 'right',
+    marginTop: 10,
+    fontSize: 12,
     fontFamily: 'Orbitron',
     color: '#fff',
   },
   name: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#fff',
     fontWeight: 'bold',
   },
   phone: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#fff',
     fontWeight: 'bold'
   },
   email: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#fff',
     fontWeight: 'bold'
   },
   address: {
-    fontSize: 14,
+    fontSize: 12,
+    width: '100%',
     color: '#fff',
     fontWeight: 'bold'
   },

@@ -20,7 +20,7 @@ class Shop extends React.Component {
 
   render() {
     return (
-      <Container>
+      <Container style={{backgroundColor: '#f8f8f8'}}>
         <Content>
           <FlatList
             horizontal={true}
@@ -180,6 +180,7 @@ const styles = StyleSheet.create({
   },
   contentBox: {
     flexDirection: 'row',
+    backgroundColor: '#fff',
     paddingLeft: 5,
     paddingRight: 5
   },

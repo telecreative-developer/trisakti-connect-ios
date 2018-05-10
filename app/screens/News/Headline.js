@@ -117,7 +117,8 @@ const styles = StyleSheet.create({
 	},
 	avatar: {
 		height: 30,
-		width: 30
+		width: 30,
+		borderRadius: 15
 	},
 	name: {
 		fontSize: 11,
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor:'#1ABC9C',
-		width: 60,
+		width: 100,
 		height: 25,
 		borderRadius: 3
   }

@@ -6,6 +6,7 @@ import { View } from 'react-native'
 import ThemeContainer from '../ThemeContainer'
 import { connect } from 'react-redux'
 import { setLinkNavigate } from '../../actions/processor'
+import defaultAvatar from '../../assets/images/default-user.png'
 
 const { width } = Dimensions.get('window')
 
@@ -37,7 +38,11 @@ class ModeReadJob extends Component {
 						<List style={{marginBottom: 10, marginTop: 10}}>
   						<ListItem avatar onPress={() => this.props.setLinkNavigate({navigate: 'PersonProfile', data: params.users[0]})}>
   							<Left>
-  								<Thumbnail style={styles.avatar} source={{uri: params.users[0].avatar}} />
+									{(params.users[0].avatar) ? (
+										<Thumbnail style={styles.avatar} source={{uri: params.users[0].avatar}} />
+									) : (
+										<Thumbnail source={defaultAvatar} style={styles.avatar} />
+									)}
   							</Left>
   							<Body style={{borderBottomWidth: 0, borderColor: '#FFF'}}>
   								<Text style={styles.name}>{params.users[0].name}</Text>
@@ -104,8 +109,9 @@ const styles = StyleSheet.create({
 		lineHeight: 22
 	},
 	avatar: {
-		width: 30,
-		height: 30
+		width: 40,
+		height: 40,
+		borderRadius: 20
 	},
 	date: {
 		fontSize: 12

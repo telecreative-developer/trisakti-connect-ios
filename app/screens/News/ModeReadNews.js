@@ -235,8 +235,9 @@ const styles = StyleSheet.create({
 		backgroundColor: '#5067FF'
 	},
 	avatar: {
-		width: 30,
-		height: 30
+		width: 40,
+		height: 40,
+		borderRadius: 20
 	},
 	comment: {
 		flex: 1
@@ -263,7 +264,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor:'#1ABC9C',
-		width: 60,
+		width: 100,
 		height: 25,
 		borderRadius: 3
   },

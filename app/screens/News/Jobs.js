@@ -88,7 +88,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const styles = StyleSheet.create({
 	title:{
-		fontSize: 18,
+		fontSize: 16,
 		fontWeight: 'bold'
 	},
 	content:{
@@ -105,8 +105,9 @@ const styles = StyleSheet.create({
 		color: '#000000'
 	},
 	avatar: {
-		width: 40,
-		height: 40,
+		width: 30,
+		height: 30,
+		borderRadius: 15,
 		marginRight: 10
 	},
 	defaultTextNote: {

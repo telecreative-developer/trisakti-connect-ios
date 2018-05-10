@@ -140,7 +140,7 @@ class Home extends Component {
 			<Container style={styles.container}>
 				<Header hasTabs style={styles.header}>
 					<Left>
-						<Image source={headerlogo} style={{ height: height / 30, width: width / 2 }} />
+						<Image source={headerlogo} style={{ height: 15, width: 180}} />
 					</Left>
 					<Right>
 						<Button transparent onPress={() => this.navigateToOption()}>
