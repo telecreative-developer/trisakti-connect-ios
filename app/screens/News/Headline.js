@@ -1,4 +1,3 @@
-/* @flow */
 import React, { Component } from 'react'
 import { FlatList, Image, View, BackHandler, StyleSheet, TouchableHighlight } from 'react-native'
 import { Left, Thumbnail, Card, Badge, Right, Body, CardItem, Text, H3 } from 'native-base'
@@ -8,14 +7,14 @@ import { setLinkNavigate } from '../../actions/processor'
 import { setModeReadNews, setContentReadNews, fetchAllNews, fetchAllNewsRealtime } from '../../actions/news'
 import defaultAvatar from '../../assets/images/default-user.png'
 
-type State = {
-  loading: boolean
-}
+class Headline extends Component {
+  constructor() {
+    super()
 
-class Headline extends Component<{}, State> {
-  state = {
-    loading: false
-	}
+    this.state = {
+      loading: false
+    }
+  }
 
   async componentWillMount() {
     await this.setState({loading: true})
@@ -66,13 +65,11 @@ class Headline extends Component<{}, State> {
   	</TouchableHighlight>
   )
 
-  key = (item, index) => index
-
   render() {
   	return (
   		<FlatList
   			data={this.props.news}
-  			keyExtractor={this.key}
+  			keyExtractor={(item, index) => JSON.stringify(index)}
   			renderItem={this.renderItems}
 				refreshing={this.state.loading}
 				onRefresh={() => this.handleRefresh()} />
