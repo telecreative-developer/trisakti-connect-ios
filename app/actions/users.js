@@ -60,7 +60,7 @@ export const registerManual = (data) => {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({...data, verified: false})
+				body: JSON.stringify({...data, verified: true})
 			})
 			await dispatch(registerSuccess(true))
 			await dispatch(setLoading({condition: false, process_on: 'register'}))
